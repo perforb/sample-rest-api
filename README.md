@@ -1,4 +1,4 @@
-# multi-module-sample
+# cloud-native-buildpacks-multi-module-sample
 
 # Build Image for API module
 
