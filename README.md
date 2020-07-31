@@ -13,12 +13,12 @@ $ docker build -t demo-api:latest .
 
 # Run application using Docker
 
-`$ docker run -p 8080:8080 --name api <NAME>[:<TAG>]`
+`$ docker run --rm -p 8080:8080 --name api <NAME>[:<TAG>]`
 
 ### For example
 
 ```sh
-$ docker run -p 8080:8080 --name api demo-api:latest
+$ docker run --rm -p 8080:8080 --name api demo-api:latest
 ```
 
 # Refferences
