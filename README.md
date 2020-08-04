@@ -1,4 +1,4 @@
-# cloud-native-buildpacks-multi-module-sample
+# layered-jar-format-sample
 
 # Build Image for API module
 
@@ -13,7 +13,7 @@ $ docker build -t demo-api:latest .
 
 # Run application using Docker
 
-`$ docker run --rm -p 8080:8080 --name api <NAME>[:<TAG>]`
+`$ docker run --rm -p <HOST_PORT>:8080 --name <CONTAINER_NAME> <NAME>[:<TAG>]`
 
 ### For example
 
