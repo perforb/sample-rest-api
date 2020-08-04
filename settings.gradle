@@ -1,2 +1,2 @@
-rootProject.name = 'multi-module-sample'
+rootProject.name = 'layered-jar-format-sample'
 include 'api', 'share'
