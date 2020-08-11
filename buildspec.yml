@@ -1,21 +1,25 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_DEFAULT_REGION: 'ap-northeast-1'
+    IMAGE_NAME: 'ecr-repository-api'
 phases:
   install:
     runtime-versions:
       docker: 18
   pre_build:
     commands:
+    - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
     - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-    - REPO=$(aws ecr describe-repositories --repository-names ${IMAGE_REPO_NAME} --output text --query "repositories[0].repositoryUri")
-    - IMAGE=${REPO}:latest
+    - URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_NAME}
   build:
     commands:
     - cd api/
-    - docker build -t ${IMAGE} .
-    - docker push ${IMAGE}
+    - docker build -t ${URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION} .
+    - docker push ${URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}
   post_build:
     commands:
-    - printf '[{"name":"example","imageUri":"%s"}]' ${IMAGE} > imagedefinitions.json
+    - printf '[{"name":"restapi","imageUri":"%s"}]' ${URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION} > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
