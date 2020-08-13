@@ -2,24 +2,26 @@ version: 0.2
 
 env:
   variables:
+    DOCKER_BUILDKIT: "1"
     AWS_DEFAULT_REGION: 'ap-northeast-1'
-    IMAGE_NAME: 'ecr-repository-api'
+    REPOSITORY_NAME: 'ecr-repository-api'
 phases:
   install:
     runtime-versions:
       docker: 18
   pre_build:
     commands:
-    - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
-    - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-    - URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_NAME}
+      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+      - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      - ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_NAME}
+      - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - ./gradlew clean build
   build:
     commands:
-    - cd api/
-    - docker build -t ${URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION} .
-    - docker push ${URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - docker build -t ${ECR_URI}:${IMAGE_TAG} api/
+      - docker push ${ECR_URI}:${IMAGE_TAG}
   post_build:
     commands:
-    - printf '[{"name":"restapi","imageUri":"%s"}]' ${URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION} > imagedefinitions.json
+    - printf '{"ImageURI":"%s"}' ${ECR_URI}:${IMAGE_TAG} > imageDetail.json
 artifacts:
-  files: imagedefinitions.json
+  files: imageDetail.json
