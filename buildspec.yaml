@@ -15,6 +15,8 @@ phases:
       - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
       - ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_NAME}
       - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - sed -i -e "s/<AWS_ACCOUNT_ID>/${AWS_ACCOUNT_ID}/" taskdef.json
+      - cat taskdef.json
       - ./gradlew clean build
   build:
     commands:
@@ -22,6 +24,9 @@ phases:
       - docker push ${ECR_URI}:${IMAGE_TAG}
   post_build:
     commands:
-    - printf '{"ImageURI":"%s"}' ${ECR_URI}:${IMAGE_TAG} > imageDetail.json
+      - printf '{"ImageURI":"%s"}' ${ECR_URI}:${IMAGE_TAG} > imageDetail.json
 artifacts:
-  files: imageDetail.json
+  files:
+    - appspec.yaml
+    - taskdef.json
+    - imageDetail.json
