@@ -1,14 +1,17 @@
 # layered-jar-format-sample
 
+# Build
+
+`./gradlew clean build`
+
 # Build Image for API module
 
-`$ docker build -t <NAME>[:<TAG>] .`
+`$ docker build -t <NAME>[:<TAG>] <DOCKERFILE_PATH>`
 
 ### For example
 
 ```sh
-$ cd api
-$ docker build -t demo-api:latest .
+$ docker build -t demo-api:latest api/
 ```
 
 # Run application using Docker
