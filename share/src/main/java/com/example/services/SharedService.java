@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 public class SharedService {
 
   public String getServiceName() {
-    return "SharedService";
+    return "New SharedService!";
   }
 }
