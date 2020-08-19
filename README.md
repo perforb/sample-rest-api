@@ -1,4 +1,4 @@
-# layered-jar-format-sample
+# sample-rest-api
 
 # Build
 
