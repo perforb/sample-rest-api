@@ -16,12 +16,12 @@ $ docker build -t demo-api:latest api/
 
 # Run application using Docker
 
-`$ docker run --rm -p <HOST_PORT>:8080 --name <CONTAINER_NAME> <NAME>[:<TAG>]`
+`$ docker run --rm -p <HOST_PORT>:9000 --name <CONTAINER_NAME> <NAME>[:<TAG>]`
 
 ### For example
 
 ```sh
-$ docker run --rm -p 8080:8080 --name api demo-api:latest
+$ docker run --rm -p 80:9000 --name api demo-api:latest
 ```
 
 # Refferences
