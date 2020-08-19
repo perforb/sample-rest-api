@@ -35,15 +35,15 @@
       ]
     },
     {
-      "name": "app",
+      "name": "api",
       "image": "<IMAGE1_NAME>",
       "essential": true,
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
           "awslogs-region": "ap-northeast-1",
-          "awslogs-stream-prefix": "ecs-app",
-          "awslogs-group": "/ecs/app"
+          "awslogs-stream-prefix": "ecs-api",
+          "awslogs-group": "/ecs/api"
         }
       },
       "secrets": [
