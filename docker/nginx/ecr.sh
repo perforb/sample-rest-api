@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $(dirname "$0") || exit
+
 AWS_REGION=ap-northeast-1
 NGINX_REPO_NAME=ecr-web
 IMAGE_TAG=latest

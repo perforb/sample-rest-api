@@ -1,5 +1,5 @@
 {
-  "family": "api",
+  "family": "restapi",
   "networkMode": "awsvpc",
   "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecs-task-execution",
   "cpu": "256",
