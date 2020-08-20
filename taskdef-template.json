@@ -60,7 +60,7 @@
           "valueFrom": "/db/password"
         },
         {
-          "name": "ELASTICACHE_PRIMARY_ ENDPOINT",
+          "name": "ELASTICACHE_PRIMARY_ENDPOINT",
           "valueFrom": "/elasticache/primaryendpoint"
         },
         {
