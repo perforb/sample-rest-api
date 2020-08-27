@@ -1,0 +1,86 @@
+{
+  "family": "restapi",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecs-task-execution",
+  "cpu": "256",
+  "memory": "512",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "containerDefinitions": [
+    {
+      "name": "web",
+      "image": "<AWS_ACCOUNT_ID>.dkr.ecr.ap-northeast-1.amazonaws.com/ecr-web:latest",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs-web",
+          "awslogs-group": "/ecs/web"
+        }
+      },
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "ulimits": [
+        {
+          "name": "nofile",
+          "softLimit": 65536,
+          "hardLimit": 65536
+        }
+      ]
+    },
+    {
+      "name": "api",
+      "image": "<IMAGE1_NAME>",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs-api",
+          "awslogs-group": "/ecs/api"
+        }
+      },
+      "secrets": [
+        {
+          "name": "DB_ENDPOINT",
+          "valueFrom": "/db/endpoint"
+        },
+        {
+          "name": "DB_USERNAME",
+          "valueFrom": "/db/username"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "/db/password"
+        },
+        {
+          "name": "ELASTICACHE_PRIMARY_ENDPOINT",
+          "valueFrom": "/elasticache/primaryendpoint"
+        },
+        {
+          "name": "ELASTICACHE_READER_ENDPOINT",
+          "valueFrom": "/elasticache/readerendpoint"
+        }
+      ],
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 9000
+        }
+      ],
+      "ulimits": [
+        {
+          "name": "nofile",
+          "softLimit": 65536,
+          "hardLimit": 65536
+        }
+      ]
+    }
+  ]
+}
