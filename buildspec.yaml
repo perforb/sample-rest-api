@@ -20,7 +20,6 @@ phases:
     commands:
       - docker build -t ${ECR_URI}:${IMAGE_TAG} api/
       - docker push ${ECR_URI}:${IMAGE_TAG}
-      - docker push ${ECR_URI}:latest
   post_build:
     commands:
       - bash taskdef.sh -p ${ACTIVE_PROFILE} -a ${AWS_ACCOUNT_ID}
