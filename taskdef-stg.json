@@ -36,10 +36,6 @@
         {
           "name": "ELASTICACHE_PRIMARY_ENDPOINT",
           "valueFrom": "/elasticache/primaryendpoint"
-        },
-        {
-          "name": "ELASTICACHE_READER_ENDPOINT",
-          "valueFrom": "/elasticache/readerendpoint"
         }
       ],
       "portMappings": [
