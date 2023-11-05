@@ -1,3 +1,4 @@
+# https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/build-env-ref-env-vars.html
 version: 0.2
 
 env:
@@ -8,22 +9,20 @@ env:
 phases:
   install:
     runtime-versions:
-      docker: 18
+      java: corretto11
   pre_build:
     commands:
       - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
       - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
       - ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPOSITORY_NAME}
       - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
-      - ./gradlew clean build
   build:
     commands:
-      - docker build -t ${ECR_URI}:${IMAGE_TAG} api/
+      - ./gradlew :api:bootBuildImage --imageName=${ECR_URI}:${IMAGE_TAG}
       - docker push ${ECR_URI}:${IMAGE_TAG}
   post_build:
     commands:
-      - cat taskdef-template.json | sed -e "s/<AWS_ACCOUNT_ID>/${AWS_ACCOUNT_ID}/g" > taskdef.json
-      - cat taskdef.json
+      - bash taskdef.sh -p ${ACTIVE_PROFILE} -a ${AWS_ACCOUNT_ID}
       - printf '{"ImageURI":"%s"}' ${ECR_URI}:${IMAGE_TAG} > imageDetail.json
 artifacts:
   files:

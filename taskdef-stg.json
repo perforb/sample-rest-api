@@ -1,0 +1,56 @@
+{
+  "family": "restapi",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecs-task-execution",
+  "cpu": "256",
+  "memory": "512",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "containerDefinitions": [
+    {
+      "name": "api",
+      "image": "<IMAGE1_NAME>",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs-api",
+          "awslogs-group": "/ecs/api"
+        }
+      },
+      "secrets": [
+        {
+          "name": "DB_ENDPOINT",
+          "valueFrom": "/db/endpoint"
+        },
+        {
+          "name": "DB_USERNAME",
+          "valueFrom": "/db/username"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "/db/password"
+        },
+        {
+          "name": "ELASTICACHE_PRIMARY_ENDPOINT",
+          "valueFrom": "/elasticache/primaryendpoint"
+        }
+      ],
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 9000
+        }
+      ],
+      "ulimits": [
+        {
+          "name": "nofile",
+          "softLimit": 65536,
+          "hardLimit": 65536
+        }
+      ]
+    }
+  ]
+}

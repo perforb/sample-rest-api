@@ -1,4 +1,8 @@
-# layered-jar-format-sample
+# sample-rest-api
+
+# Build
+
+`./gradlew clean build`
 
 # Build
 
