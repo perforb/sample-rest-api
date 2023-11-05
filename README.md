@@ -4,6 +4,10 @@
 
 `./gradlew clean build`
 
+# Build
+
+`./gradlew clean build`
+
 # Build Image for API module
 
 `$ docker build -t <NAME>[:<TAG>] <DOCKERFILE_PATH>`
